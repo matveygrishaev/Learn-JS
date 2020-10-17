@@ -1,5 +1,3 @@
-'use strick';
-
 'use strict';
 
 //lesson05 
@@ -17,7 +15,7 @@ let money,
     deposit = confirm('Есть ли у вас депозит в банке'),
     mission = 50000,
     period = 3;
-
+    
 // Задание №1
 let start = function() {
     do {
