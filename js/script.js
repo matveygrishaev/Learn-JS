@@ -1,33 +1,43 @@
 'use strict';
 
-//lesson05 
-
-/* Функция проверяет на:
-!isNaN, восклицательный знак говорит, что если это число, возвращается true, если строка или что-то другое вернет false
-isFinite(): если число конечное, то true и если бесконечное, то false */
 let isNumber = function(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
 let money,
-    income = 'Фриланс',
-    addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую'),
-    deposit = confirm('Есть ли у вас депозит в банке'),
-    mission = 50000,
-    period = 3;
-    
-// Задание №1
-let start = function() {
-    do {
-        money = prompt('Ваш месячный доход?');
-    } while (!isNumber(money));
-};
+    start = function() {
+        do {
+            money = prompt('Ваш месячный доход?', 50000);
+        } while (!isNumber(money));
+    };
 
 start();
+
+
+
+let appData = {
+    income: {},
+    addIncome: [],
+    expenses: {},
+    addExpenses: [],
+    deposit: false,
+    mission: 50000,
+    period: 3,
+    asking: function() {
+        let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
+            appData.addExpenses = addExpenses.toLowerCase().split(', ');
+            appData.deposit = confirm('Есть ли у вас депозит в банке');
+    }
+};
+
 
 let showTypeOf = function(item) {
     console.log(typeof item);
 };
+
+showTypeOf(money);
+showTypeOf(appData.income);
+showTypeOf(appData.deposit);
 
 let expenses = [];
 
@@ -40,10 +50,10 @@ let getExpensesMonth = function() {
     // С помощью цикла будем задавать вопрос про расходы и складывать сумму расходов
     for (let i = 0; i < 2; i++) {
         
-        expenses[i] = prompt('Введите обязательную статью расходов?');
+        expenses[i] = prompt('Введите обязательную статью расходов?', 'Аренда');
 
         do {
-            sum2 = prompt('Во сколько это обойдется?');
+            sum2 = prompt('Во сколько это обойдется?', 3000);
         }
         while (!isNumber(sum2));
         sum = Number(sum) + Number(sum2)
@@ -57,18 +67,18 @@ let expensesAmount = getExpensesMonth();
 
 console.log('Расходы за месяц: ', expensesAmount);
 
-    // Сбережения за месяц
+// Сбережения за месяц
 let getAccumulatedMonth = function() {
     return money - expensesAmount;
 };
 
-    // Значение переменной приравнивается результату функции 
+// Значение переменной приравнивается результату функции 
 let accumulatedMonth = getAccumulatedMonth();
 console.log('Сбережения за месяц: ', accumulatedMonth);
 
-    // Рассчет периода достижения цели
+// Рассчет периода достижения цели
 let getTargetMonth = function() {
-    return mission / accumulatedMonth;
+    return appData.mission / accumulatedMonth;
 };
 console.log('Период достижения цели: ', getTargetMonth());
 
