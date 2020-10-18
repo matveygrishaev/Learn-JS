@@ -4,16 +4,19 @@ let isNumber = function(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
+let expensesAmount = 0;
+
+let accumulatedMonth = 0;
+
 let money,
     start = function() {
         do {
             money = prompt('Ваш месячный доход?', 50000);
         } while (!isNumber(money));
+        return money;
     };
-
+    
 start();
-
-
 
 let appData = {
     budget: money,
@@ -29,7 +32,7 @@ let appData = {
         let sum2 = 0;
 
         for (let i = 0; i < 2; i++) {
-            
+
             appData.expenses[i] = prompt('Введите обязательную статью расходов?', 'Аренда');
 
             do {
@@ -58,19 +61,16 @@ let appData = {
             appData.deposit = confirm('Есть ли у вас депозит в банке');
     },
     getStatusIncome: function() {
-            if (getTargetMonth() > 0) {
-                console.log('Цель будет достигнута')
+            if (appData.getTargetMonth() > 0) {
+                console.log('Цель будет достигнута');
             } else {
                 console.log('Цель не будет достигнута');
             }
     }
 };
 
-appData.asking()
+appData.asking();
 
-let expensesAmount = appData.getExpensesMonth();
+expensesAmount = appData.getExpensesMonth();
 
-console.log('Расходы за месяц: ', expensesAmount);
-
-let accumulatedMonth = appData.getAccumulatedMonth();
-console.log('Сбережения за месяц: ', accumulatedMonth);
+accumulatedMonth = appData.getAccumulatedMonth();
