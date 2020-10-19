@@ -13,7 +13,7 @@ let money,
     };
 
 let appData = {
-    budget: start(),
+    budget: start(),        //  budget: money,
     budgetDay: 0,
     budgetMonth: 0,
     income: {},
@@ -22,42 +22,48 @@ let appData = {
     expensesMonth: 0,
     addExpenses: [],
     deposit: false,
+    percentDeposit: 0,
+    moneyDeposit: 0,
     mission: 50000,
     period: 3,
     asking: function() {
-        let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
+
+        if (confirm('Есть ли у вас дополнительный источник заработка?')) {
+            let itemIncome = prompt('Какой у вас дополнительный зароботок?', 'Таксую');
+            let cashIncome = prompt('Сколько в месяц вы на этом зарабатываете?', '10000');
+            appData.income[itemIncome] = cashIncome;
+        }
+
+        let addExpenses = prompt('Перечислите возможные расходы через запятую');
             appData.addExpenses = addExpenses.toLowerCase().split(', ');
-            appData.deposit = confirm('Есть ли у вас депозит в банке');
+            appData.deposit = confirm('Есть ли у вас депозит в банке?');
 
-        let number = 0;
-        let exp = [];
-
+        
         for (let i = 0; i < 2; i++) {
 
-            exp[i] = prompt('Введите обязательную статью расходов?');
+                let itemExpenses = prompt('Введите обязательную статью расходов?');
+                let cashExpenses;   
 
-            do {
-                number = prompt('Во сколько это обойдется?'); // 4
-            }
-            while (!isNumber(number));
-            appData.expenses[exp[i]] = number; // 3
+                do {
+                    cashExpenses = prompt('Во сколько это обойдется?'); // 4
+                }
+                while (!isNumber(cashExpenses));
+                appData.expenses[itemExpenses] = cashExpenses; // 3
         }
     },
 
     // Складывает все значения number в expensesMonth:
     getExpensesMonth: function() {
-        let sum = 0;
 
         for (let key in appData.expenses) {
-            sum = sum + Number(appData.expenses[key]); // 2
+            appData.expensesMonth += +appData.expenses[key]; // 2
         }
-        return (appData.expensesMonth = sum); // 1
     },
     getBudget: function() {
         // start() - расходы за месяц
         appData.budgetMonth = appData.budget - appData.expensesMonth;
         
-        appData.budgetDay = Math.floor(appData.expensesMonth / 30);
+        appData.budgetDay = Math.floor(appData.budgetMonth / 30);     //!ошибка budgetMonth вместо expensesMonth
     },
 
     getTargetMonth: function() {
@@ -71,27 +77,37 @@ let appData = {
             return ('У Вас средний уровень дохода');
         } else if (appData.budgetDay > 0 || appData.budgetDay === 0) {
             return ('К сожалению, у Вас уровень дохода ниже среднего');
-        } else if (appData.budgetDay < 0) {
+        } else {
             return ('Что-то пошло не так');
         }
     },
+
+    getInfoDeposit: function() {
+        if (appData.deposit) {
+            appData.percentDeposit = prompt('Какой годовой процент?', 10);
+            appData.moneyDeposit = prompt('Какая сумма заложена?', 10000);
+        }
+    },
+
+    calcSavedMoney: function () {
+        return Number(appData.budgetMonth) * appData.period;
+    }
 };
 
 appData.asking();
-
-console.log('Расходы за месяц: ' + appData.getExpensesMonth());
-
+appData.getExpensesMonth();
 appData.getBudget();
 
+console.log('Расходы за месяц: ' + appData.expensesMonth);
+
 if (appData.getTargetMonth() >= 0) {
-  console.log('Цель будет достигнута за: ' + appData.getTargetMonth() + ' месяца');
+    console.log('Цель будет достигнута за: ' + appData.getTargetMonth() + ' месяца');
 } else {
-  console.log('Цель не будет достигнута');
+    console.log('Цель не будет достигнута');
 }
 
 console.log(appData.getStatusIncome());
 
-console.log('Наша программа включает в себя данные:');
 for (let key in appData) {
-    console.log(key + ': ' + appData[key]);
+    console.log('Наша программа включает в себя данные:' + key + ': ' + appData[key]);
 }
