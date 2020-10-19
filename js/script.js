@@ -42,7 +42,6 @@ let appData = {
             while (!isNumber(number));
             appData.expenses[exp[i]] = number; // 3
         }
-        
     },
 
     // Складывает все значения number в expensesMonth:
